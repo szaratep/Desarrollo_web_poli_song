@@ -14,7 +14,7 @@ def get_conn():
 def listar_usuarios():
     with get_conn() as conn:
         filas = conn.execute(
-            "SELECT * FROM usuario ORDER BY id_ususario"
+            "SELECT * FROM usuario ORDER BY id_usuario"
             ).fetchall()
     items = [dict(f) for f in filas]
     return jsonify(items), 200
