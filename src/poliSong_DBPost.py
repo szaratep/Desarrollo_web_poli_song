@@ -24,6 +24,17 @@ def ensure_schema():
 ensure_schema()
 
 # -------- GET: detalle --------
+#GET USUARIO
+@app.route("/usuario", methods=["GET"])
+def listar_usuarios():
+    with get_conn() as conn:
+        filas = conn.execute(
+            "SELECT u.id_usuario, u.nombre, u.contrasena, t.telefono, c.correo FROM usuario u LEFT JOIN telefono t ON u.id_usuario = t.id_us LEFT JOIN correo c ON u.id_usuario = c.id_us ORDER BY u.id_usuario"
+            ).fetchall()
+    items = [dict(f) for f in filas]
+    return jsonify(items), 200
+
+#GET DETALLE USUARIO
 @app.route("/usuarios/<int:usuario_id>", methods=["GET"])
 def detalle_usuario(usuario_id):
     with get_conn() as conn:
@@ -33,6 +44,28 @@ def detalle_usuario(usuario_id):
         ).fetchone()
     if fila is None:
         return jsonify(error="Usuario no encontrado"), 404
+    return jsonify(dict(fila)), 200
+
+#GET PROVEEDOR
+@app.route("/proveedor", methods=["GET"])
+def listar_proveedores():
+    with get_conn() as conn:
+        filas = conn.execute(
+            "SELECT p.id_proveedor, p.nombre, t.telefono, c.correo FROM proveedor p LEFT JOIN telefono_proveedor t ON p.id_proveedor = t.id_proveedor LEFT JOIN correo_proveedor c ON p.id_proveedor = c.id_proveedor ORDER BY p.id_proveedor"
+            ).fetchall()
+    items = [dict(f) for f in filas]
+    return jsonify(items), 200
+
+#GET DETALLE PROVEDOR
+@app.route("/proveedor/<int:proveedor_id>", methods=["GET"])
+def detalle_proveedor(proveedor_id):
+    with get_conn() as conn:
+        fila = conn.execute(
+            "SELECT p.id_proveedor, p.nombre, t.telefono, c.correo FROM proveedor p LEFT JOIN telefono_proveedor t ON p.id_proveedor = t.id_proveedor LEFT JOIN correo_proveedor c ON p.id_proveedor = c.id_proveedor ORDER BY p.id_proveedor",
+            (proveedor_id,)
+        ).fetchone()
+    if fila is None:
+        return jsonify(error="proveedor no encontrado"), 404
     return jsonify(dict(fila)), 200
 
 # -------- POST: crear --------
