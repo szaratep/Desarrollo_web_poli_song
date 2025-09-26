@@ -249,11 +249,11 @@ def crear_discoMp3():
         return jsonify(error="JSON malformado o vacío"), 400
 
     nombre = data.get("nombre")
-    duracion = data.get("duracion")
+    duration = data.get("duration")
     tamano = data.get("tamano")
     precio = data.get("precio")
 
-    faltan = [k for k in ("nombre", "duracion", "tamano", "precio") if k not in data]
+    faltan = [k for k in ("nombre", "duration", "tamano", "precio") if k not in data]
     if faltan:
         return jsonify(error=f"Faltan campos: {', '.join(faltan)}"), 400
 
@@ -263,11 +263,11 @@ def crear_discoMp3():
     if not nombre or len(nombre) > 100:
         return jsonify(error="nombre no puede estar vacío (<= 100 chars)"), 422
     
-    if not isinstance(duracion, str):
-        return jsonify(error="duracion debe ser string"), 422
-    duracion = duracion.strip()
-    if not duracion or len(duracion) > 100:
-        return jsonify(error="duracion no puede estar vacía (<= 100 chars)"), 422
+    if not isinstance(duration, str):
+        return jsonify(error="duration debe ser string"), 422
+    duration = duration.strip()
+    if not duration or len(duration) > 100:
+        return jsonify(error="duration no puede estar vacía (<= 100 chars)"), 422
     
     if not isinstance(tamano, str):
         return jsonify(error="tamano debe ser string"), 422
@@ -283,12 +283,12 @@ def crear_discoMp3():
 
     with get_conn() as conn:
         cur = conn.execute(
-            "INSERT INTO discoMp3 (nombre, duracion, tamano, precio) VALUES (?, ?, ?, ?)",
-            (nombre, duracion, tamano, precio)
+            "INSERT INTO discoMp3 (nombre, duration, tamano, precio) VALUES (?, ?, ?, ?)",
+            (nombre, duration, tamano, precio)
         )
         nuevo_id = cur.lastrowid
 
-    resp = jsonify({"id_discoMp3": nuevo_id, "nombre": nombre, "duracion":duracion, "tamano": tamano, "precio": precio})
+    resp = jsonify({"id_discoMp3": nuevo_id, "nombre": nombre, "duration":duration, "tamano": tamano, "precio": precio})
     resp.status_code = 201
     resp.headers["Location"] = f"/discoMp3/{nuevo_id}"
     return resp
