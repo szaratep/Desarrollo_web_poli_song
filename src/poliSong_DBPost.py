@@ -75,3 +75,6 @@ def crear_usuario():
     resp.status_code = 201
     resp.headers["Location"] = f"/usuarios/{nuevo_id}"
     return resp
+
+if __name__ == "__main__":
+    app.run(debug=True)
