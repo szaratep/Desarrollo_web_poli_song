@@ -207,7 +207,7 @@ def crear_cancion():
 
 #TABLA DISCOMP3
 @app.route("/crear/discoMp3", methods=["POST"])
-def crear_cancion():
+def crear_discoMp3():
     if not request.is_json:
         return jsonify(error="Content-Type debe ser application/json"), 415
 
@@ -262,7 +262,7 @@ def crear_cancion():
 
 #TABLA VINILO
 @app.route("/crear/vinilo", methods=["POST"])
-def crear_cancion():
+def crear_vinilo():
     if not request.is_json:
         return jsonify(error="Content-Type debe ser application/json"), 415
 
