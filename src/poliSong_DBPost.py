@@ -157,5 +157,53 @@ def crear_proveedor():
     resp.headers["Location"] = f"/proveedores/{nuevo_id}"
     return resp
 
+#TABLA CANCION
+@app.route("/crear/cancion", methods=["POST"])
+def crear_cancion():
+    if not request.is_json:
+        return jsonify(error="Content-Type debe ser application/json"), 415
+
+    data = request.get_json(silent=True)
+    if data is None:
+        return jsonify(error="JSON malformado o vacío"), 400
+
+    nombre = data.get("nombre")
+    duracion = data.get("duracion")
+    tamano = data.get("tamano")
+
+    faltan = [k for k in ("nombre", "duracion", "tamano") if k not in data]
+    if faltan:
+        return jsonify(error=f"Faltan campos: {', '.join(faltan)}"), 400
+
+    if not isinstance(nombre, str):
+        return jsonify(error="nombre debe ser string"), 422
+    nombre = nombre.strip()
+    if not nombre or len(nombre) > 100:
+        return jsonify(error="nombre no puede estar vacío (<= 100 chars)"), 422
+    
+    if not isinstance(duracion, str):
+        return jsonify(error="duracion debe ser string"), 422
+    duracion = duracion.strip()
+    if not duracion or len(duracion) > 100:
+        return jsonify(error="duracion no puede estar vacía (<= 100 chars)"), 422
+    
+    if not isinstance(tamano, str):
+        return jsonify(error="tamano debe ser string"), 422
+    tamano = tamano.strip()
+    if not tamano or len(tamano) > 100:
+        return jsonify(error="tamano no puede estar vacía (<= 100 chars)"), 422
+
+    with get_conn() as conn:
+        cur = conn.execute(
+            "INSERT INTO cancion (nombre) VALUES (?)",
+            (nombre,)
+        )
+        nuevo_id = cur.lastrowid
+
+    resp = jsonify({"id_cancion": nuevo_id, "nombre": nombre, "duracion":duracion, "tamano": tamano})
+    resp.status_code = 201
+    resp.headers["Location"] = f"/canciones/{nuevo_id}"
+    return resp
+
 if __name__ == "__main__":
     app.run(debug=True)
