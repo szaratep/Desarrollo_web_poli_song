@@ -109,7 +109,7 @@ def detalle_cancion(id_cancion):
 def listar_discos():
     with get_conn() as conn:
         filas = conn.execute(
-            "SELECT id_discoMp3 AS id_discoMp3, nombre, duracion, tamaño, precio FROM discoMp3 ORDER BY id_discoMp3"
+            "SELECT id_discoMp3 AS id_discoMp3, nombre, duration, tamano, precio FROM discoMp3 ORDER BY id_discoMp3"
         ).fetchall()
     return jsonify([dict(f) for f in filas]), 200
 
@@ -131,7 +131,7 @@ def detalle_disco(id_discoMp3):
 def listar_vinilos():
     with get_conn() as conn:
         filas = conn.execute(
-            "SELECT id_vinilo AS id_vinilo, nombre, artista, año_salida, precio_unitario FROM vinilo ORDER BY id_vinilo"
+            "SELECT id_vinilo AS id_vinilo, nombre, artista, anio_salida, precio_unitario FROM vinilo ORDER BY id_vinilo"
         ).fetchall()
     return jsonify([dict(f) for f in filas]), 200
 
@@ -140,7 +140,7 @@ def listar_vinilos():
 def detalle_vinilo(id_vinilo):
     with get_conn() as conn:
         fila = conn.execute(
-            "SELECT id_vinilo AS id_vinilo, nombre, artista, año_salida, precio_unitario FROM vinilo WHERE id_vinilo = ?",
+            "SELECT id_vinilo AS id_vinilo, nombre, artista, anio_salida, precio_unitario FROM vinilo WHERE id_vinilo = ?",
             (id_vinilo,)
         ).fetchone()
     if fila is None:
@@ -153,7 +153,7 @@ def detalle_vinilo(id_vinilo):
 def listar_pedidos():
     with get_conn() as conn:
         filas = conn.execute(
-            "SELECT id_pedido AS id_pedido, id_us, fecha_pedido, estado, medio_pago, id_item, id_proveedor FROM pedido ORDER BY id_pedido"
+            "SELECT id_pedido AS id_pedido, id_us, fecha_pedido, estado, medio_pago FROM pedido ORDER BY id_pedido"
         ).fetchall()
     return jsonify([dict(f) for f in filas]), 200
 
@@ -162,7 +162,7 @@ def listar_pedidos():
 def detalle_pedido(id_pedido):
     with get_conn() as conn:
         fila = conn.execute(
-            "SELECT id_pedido AS id_pedido, id_us, fecha_pedido, estado, medio_pago, id_item, id_proveedor FROM pedido WHERE id_pedido = ?",
+            "SELECT id_pedido AS id_pedido, id_us, fecha_pedido, estado, medio_pago FROM pedido WHERE id_pedido = ?",
             (id_pedido,)
         ).fetchone()
     if fila is None:
@@ -302,5 +302,5 @@ def detalle_recopilacion(id_recopilacion):
     return jsonify(dict(fila)), 200
 
 if __name__ == "__main__":
-    app.run(debug=True)
     
+    app.run(debug=True)
