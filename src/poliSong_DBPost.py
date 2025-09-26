@@ -195,8 +195,8 @@ def crear_cancion():
 
     with get_conn() as conn:
         cur = conn.execute(
-            "INSERT INTO cancion (nombre) VALUES (?)",
-            (nombre,)
+            "INSERT INTO cancion (nombre, duracion, tamano) VALUES (?, ?, ?)",
+            (nombre, duracion, tamano)
         )
         nuevo_id = cur.lastrowid
 
