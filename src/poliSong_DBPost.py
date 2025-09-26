@@ -526,5 +526,41 @@ def crear_pedido():
     resp.headers["Location"] = f"/pedido/{nuevo_id}"
     return resp
 
+#TABLA ITEM
+@app.route("/crear/item", methods=["POST"])
+def crear_item():
+    if not request.is_json:
+        return jsonify(error="Content-Type debe ser application/json"), 415
+    
+    data = request.get_json(silent=True)
+    if data is None:
+        return jsonify(error="JSON malformado o vacío"), 400
+    
+    tipo_item = data.get("tipo_item")
+    id_item = data.get("id_item")
+    cantidad = data.get("cantidad")
+
+    # Validar que no falte ningún campo
+    faltan = [k for k in ("tipo_item", "id_item", "cantidad") if k not in data]
+    if faltan:
+        return jsonify(error=f"Faltan campos: {', '.join(faltan)}"), 400
+    
+    with get_conn() as conn:
+        cur = conn.execute(
+            "INSERT INTO item (tipo_item, id_item, cantidad) VALUES (?, ?, ?)",
+            (tipo_item, id_item, cantidad)
+        )
+        nuevo_id = cur.lastrowid
+    
+    resp = jsonify({
+        "id": nuevo_id, 
+        "tipo_item": tipo_item,
+        "id_item": id_item,
+        "cantidad": cantidad
+    })
+    resp.status_code = 201
+    resp.headers["Location"] = f"/item/{nuevo_id}"
+    return resp
+
 if __name__ == "__main__":
     app.run(debug=True)
