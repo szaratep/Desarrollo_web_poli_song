@@ -205,5 +205,115 @@ def crear_cancion():
     resp.headers["Location"] = f"/canciones/{nuevo_id}"
     return resp
 
+#TABLA DISCOMP3
+@app.route("/crear/discoMp3", methods=["POST"])
+def crear_cancion():
+    if not request.is_json:
+        return jsonify(error="Content-Type debe ser application/json"), 415
+
+    data = request.get_json(silent=True)
+    if data is None:
+        return jsonify(error="JSON malformado o vacío"), 400
+
+    nombre = data.get("nombre")
+    duracion = data.get("duracion")
+    tamano = data.get("tamano")
+    precio = data.get("precio")
+
+    faltan = [k for k in ("nombre", "duracion", "tamano", "precio") if k not in data]
+    if faltan:
+        return jsonify(error=f"Faltan campos: {', '.join(faltan)}"), 400
+
+    if not isinstance(nombre, str):
+        return jsonify(error="nombre debe ser string"), 422
+    nombre = nombre.strip()
+    if not nombre or len(nombre) > 100:
+        return jsonify(error="nombre no puede estar vacío (<= 100 chars)"), 422
+    
+    if not isinstance(duracion, str):
+        return jsonify(error="duracion debe ser string"), 422
+    duracion = duracion.strip()
+    if not duracion or len(duracion) > 100:
+        return jsonify(error="duracion no puede estar vacía (<= 100 chars)"), 422
+    
+    if not isinstance(tamano, str):
+        return jsonify(error="tamano debe ser string"), 422
+    tamano = tamano.strip()
+    if not tamano or len(tamano) > 100:
+        return jsonify(error="tamano no puede estar vacía (<= 100 chars)"), 422
+    
+    if not isinstance(precio, str):
+        return jsonify(error="precio debe ser string"), 422
+    precio = precio.strip()
+    if not precio or len(precio) > 100:
+        return jsonify(error="precio no puede estar vacía (<= 100 chars)"), 422
+
+    with get_conn() as conn:
+        cur = conn.execute(
+            "INSERT INTO cancion (nombre, duracion, tamano, precio) VALUES (?, ?, ?, ?)",
+            (nombre, duracion, tamano, precio)
+        )
+        nuevo_id = cur.lastrowid
+
+    resp = jsonify({"id_cancion": nuevo_id, "nombre": nombre, "duracion":duracion, "tamano": tamano, "precio": precio})
+    resp.status_code = 201
+    resp.headers["Location"] = f"/discoMp3/{nuevo_id}"
+    return resp
+
+#TABLA VINILO
+@app.route("/crear/vinilo", methods=["POST"])
+def crear_cancion():
+    if not request.is_json:
+        return jsonify(error="Content-Type debe ser application/json"), 415
+
+    data = request.get_json(silent=True)
+    if data is None:
+        return jsonify(error="JSON malformado o vacío"), 400
+
+    nombre = data.get("nombre")
+    artista = data.get("artista")
+    anio_salida = data.get("anio_salida")
+    precio_unitario = data.get("precio_unitario")
+
+    faltan = [k for k in ("nombre", "artista", "anio_salida", "precio_unitario") if k not in data]
+    if faltan:
+        return jsonify(error=f"Faltan campos: {', '.join(faltan)}"), 400
+
+    if not isinstance(nombre, str):
+        return jsonify(error="nombre debe ser string"), 422
+    nombre = nombre.strip()
+    if not nombre or len(nombre) > 100:
+        return jsonify(error="nombre no puede estar vacío (<= 100 chars)"), 422
+    
+    if not isinstance(artista, str):
+        return jsonify(error="artista debe ser string"), 422
+    artista = artista.strip()
+    if not artista or len(artista) > 100:
+        return jsonify(error="artista no puede estar vacía (<= 100 chars)"), 422
+    
+    if not isinstance(anio_salida, str):
+        return jsonify(error="anio_salida debe ser string"), 422
+    anio_salida = anio_salida.strip()
+    if not anio_salida or len(anio_salida) > 100:
+        return jsonify(error="anio_salida no puede estar vacía (<= 100 chars)"), 422
+    
+    if not isinstance(precio_unitario, str):
+        return jsonify(error="precio_unitario debe ser string"), 422
+    precio_unitario = precio_unitario.strip()
+    if not precio_unitario or len(precio_unitario) > 100:
+        return jsonify(error="precio_unitario no puede estar vacía (<= 100 chars)"), 422
+
+    with get_conn() as conn:
+        cur = conn.execute(
+            "INSERT INTO cancion (nombre, artista, anio_salida, precio_unitario) VALUES (?, ?, ?, ?)",
+            (nombre, artista, anio_salida, precio_unitario)
+        )
+        nuevo_id = cur.lastrowid
+
+    resp = jsonify({"id_cancion": nuevo_id, "nombre": nombre, "artista":artista, "anio_salida": anio_salida, "precio_unitario": precio_unitario})
+    resp.status_code = 201
+    resp.headers["Location"] = f"/vinilo/{nuevo_id}"
+    return resp
+
 if __name__ == "__main__":
     app.run(debug=True)
