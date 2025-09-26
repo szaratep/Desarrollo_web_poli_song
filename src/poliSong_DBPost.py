@@ -250,12 +250,12 @@ def crear_discoMp3():
 
     with get_conn() as conn:
         cur = conn.execute(
-            "INSERT INTO cancion (nombre, duracion, tamano, precio) VALUES (?, ?, ?, ?)",
+            "INSERT INTO discoMp3 (nombre, duracion, tamano, precio) VALUES (?, ?, ?, ?)",
             (nombre, duracion, tamano, precio)
         )
         nuevo_id = cur.lastrowid
 
-    resp = jsonify({"id_cancion": nuevo_id, "nombre": nombre, "duracion":duracion, "tamano": tamano, "precio": precio})
+    resp = jsonify({"id_discoMp3": nuevo_id, "nombre": nombre, "duracion":duracion, "tamano": tamano, "precio": precio})
     resp.status_code = 201
     resp.headers["Location"] = f"/discoMp3/{nuevo_id}"
     return resp
@@ -305,12 +305,12 @@ def crear_vinilo():
 
     with get_conn() as conn:
         cur = conn.execute(
-            "INSERT INTO cancion (nombre, artista, anio_salida, precio_unitario) VALUES (?, ?, ?, ?)",
+            "INSERT INTO vinilo (nombre, artista, anio_salida, precio_unitario) VALUES (?, ?, ?, ?)",
             (nombre, artista, anio_salida, precio_unitario)
         )
         nuevo_id = cur.lastrowid
 
-    resp = jsonify({"id_cancion": nuevo_id, "nombre": nombre, "artista":artista, "anio_salida": anio_salida, "precio_unitario": precio_unitario})
+    resp = jsonify({"id_vinilo": nuevo_id, "nombre": nombre, "artista":artista, "anio_salida": anio_salida, "precio_unitario": precio_unitario})
     resp.status_code = 201
     resp.headers["Location"] = f"/vinilo/{nuevo_id}"
     return resp
