@@ -94,7 +94,7 @@ def detalle_cancion(id_cancion):
 def listar_discos():
     with get_conn() as conn:
         filas = conn.execute(
-            "SELECT id_discoMp3 AS id_discoMp3, nombre, duracion, tamaño, precio FROM discoMp3 ORDER BY id_discoMp3"
+            "SELECT id_discoMp3 AS id_discoMp3, nombre, duracion, tamano, precio FROM discoMp3 ORDER BY id_discoMp3"
         ).fetchall()
     return jsonify([dict(f) for f in filas]), 200
 
@@ -103,7 +103,7 @@ def listar_discos():
 def detalle_disco(id_discoMp3):
     with get_conn() as conn:
         fila = conn.execute(
-            "SELECT id_discoMp3 AS id_discoMp3, nombre, duracion, tamaño, precio FROM discoMp3 WHERE id_discoMp3 = ?",
+            "SELECT id_discoMp3 AS id_discoMp3, nombre, duracion, tamano, precio FROM discoMp3 WHERE id_discoMp3 = ?",
             (id_discoMp3,)
         ).fetchone()
     if fila is None:
@@ -116,7 +116,7 @@ def detalle_disco(id_discoMp3):
 def listar_vinilos():
     with get_conn() as conn:
         filas = conn.execute(
-            "SELECT id_vinilo AS id_vinilo, nombre, artista, año_salida, precio_unitario FROM vinilo ORDER BY id_vinilo"
+            "SELECT id_vinilo AS id_vinilo, nombre, artista, anio_salida, precio_unitario FROM vinilo ORDER BY id_vinilo"
         ).fetchall()
     return jsonify([dict(f) for f in filas]), 200
 
@@ -125,7 +125,7 @@ def listar_vinilos():
 def detalle_vinilo(id_vinilo):
     with get_conn() as conn:
         fila = conn.execute(
-            "SELECT id_vinilo AS id_vinilo, nombre, artista, año_salida, precio_unitario FROM vinilo WHERE id_vinilo = ?",
+            "SELECT id_vinilo AS id_vinilo, nombre, artista, anio_salida, precio_unitario FROM vinilo WHERE id_vinilo = ?",
             (id_vinilo,)
         ).fetchone()
     if fila is None:
